@@ -1,0 +1,36 @@
+{
+  "name": "music-app",
+  "version": "0.0.1-dev",
+  "description": "",
+  "license": "ISC",
+  "author": "clumsyBaboon",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^42.3.0",
+    "electron-builder": "^26.8.1"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.8.3"
+  },
+  "build": {
+    "appId": "com.clumsyBaboon.musicapp",
+    "productName": "Music Control App",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "package.json",
+      "preload.js",
+      "landing/**/*",
+      "!dist/**/*"
+    ],
+    "win": {
+      "target": ["nsis"]
+    }
+  }
+}

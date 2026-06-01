@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-mobile.css">
+    <link rel="stylesheet" href="aqua-design.css">
+</head>
+<body>
+    <!-- <div class="settings">
+        <button class="secondary">Save</button>
+    </div> -->
+
+    <div class="music-playback-wrapper">
+        <div class="album-photo pos-4" id="photo1" onclick="loop_from_site(1)"></div>
+        <div class="album-photo pos-3" id="photo2" onclick="loop_from_site(2)"></div>
+        <div class="album-photo pos-2" id="photo3" onclick="loop_from_site(3)"></div>
+        <div class="album-photo pos-1" id="photo4" onclick="loop_from_site(4)"></div>
+        <div class="album-photo pos0" id="photo5" onclick="loop_from_site(5)"></div>
+        <div class="album-photo pos1" id="photo6" onclick="loop_from_site(6)"></div>
+        <div class="album-photo pos2" id="photo7" onclick="loop_from_site(7)"></div>
+        <div class="album-photo pos3" id="photo8" onclick="loop_from_site(8)"></div>
+        <div class="album-photo pos4" id="photo9" onclick="loop_from_site(9)"></div>
+
+        <h1 id="music-name" class="show-control-opacity">Name</h1>
+        <h2 id="music-author" class="show-control-opacity">Author</h2>
+        <div class="music-range-wrapper show-control-opacity">
+            <p id="duration-now">0:00</p>
+            <input type="range" id="music-range" min="0" max="1000" value="0">
+            <p id="duration-left">-3:28</p>
+        </div>
+        <div class="control-buttons-wrapper show-control-opacity">
+            <button class="btn" id="btn-prev" onclick="command_prev()">
+                <svg class="" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path>
+                </svg>
+            </button>
+            <button class="btn" id="btn-stop-play" onclick="command_play_pause()">
+                <svg class="" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" id="play-pause-svg"></path>
+                    <!-- M6 19h4V5H6v14zm8-14v14h4V5h-4z -->
+                </svg>
+            </button>
+            <button class="btn" id="btn-next" onclick="command_next()">
+                <svg class="" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <button class="settings-btn">Settings</button>
+    
+    <!--  -->
+    <button class="_left" onclick="loop(-1)">LEFT</button>
+    <button class="_right" onclick="loop(1)">RIGHT</button>
+    <button class="_lyrics" onclick="lyrics()">LYRICS</button>
+    <button class="_fullscreen" onclick="fullscreen()">FULLSCREEN</button>
+    <button class="_connect_api" onclick="connect_api()">CONNECT API</button>
+    <button class="_connect_ws" onclick="connect_ws()">CONNECT TO WebSocket SERVER</button>
+    <!--  -->
+
+    <script src="script.js"></script>
+</body>
+</html>
