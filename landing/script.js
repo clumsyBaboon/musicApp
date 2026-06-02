@@ -213,3 +213,13 @@ function findSelectedNumber(queue) {
     for (let i = 0; i <= queue.length; i++) if (queue[i].selected) return i;
     return false;
 } 
+
+//SETINGS
+const settingsMenu = document.querySelector("#settings");
+let isSettingsOpen = false;
+
+function openSettings() {
+    if (isSettingsOpen) return;
+    isSettingsOpen = true;
+    settingsMenu.style.animation = "openSettings 250ms linear forwards"
+}

@@ -1,4 +1,4 @@
-.settings button {
+#settings button {
     grid-row: 1;
     font-size: 1rem;
     font-family: "myriad-pro", system-ui;
@@ -13,7 +13,7 @@
     border: none;
 }
 
-.settings button.primary {
+#settings button.primary {
     background: linear-gradient(rgba(0, 65, 184, 0.625), rgba(45, 115, 199, 0.625), rgba(33, 160, 196, 0.625));
     box-shadow: 0 0.375em 0.5em rgba(0, 0, 0, 0.3), 
                 0 0.125em 0.125em rgba(0, 78, 187, 0.5), 
@@ -22,18 +22,18 @@
     transition: box-shadow 200ms, filter 200ms;
 }
 
-.settings button.primary:hover {
+#settings button.primary:hover {
     box-shadow: 0 0.375em 0.5em rgba(0, 0, 0, 0.3), 
                 0 0.125em 0.125em rgba(0, 78, 187, 0.5), 
                 inset 0 0.25em 0.5em rgba(0, 17, 49, 0.8),
                 inset 0 0.375em 0.5em 0.25em rgba(0, 78, 187, 0.75),
                 0 0 0.5em rgba(52, 106, 227, 0.5);
 }
-.settings button.primary:active, .settings button.secondary:active{
+#settings button.primary:active, #settings button.secondary:active{
     filter: brightness(1.1);
 }
 
-.settings button.secondary {
+#settings button.secondary {
     background: linear-gradient(rgba(160, 160, 160, 0.625), rgba(255, 255, 255, 0.625));
     box-shadow: 0 0.375em 0.5em rgba(0, 0, 0, 0.2), 
                 0 0.125em 0.125em rgba(0, 0, 0, 0.3),  
@@ -42,7 +42,7 @@
     transition: box-shadow 200ms, filter 200ms;
 }
 
-.settings button.secondary:hover {
+#settings button.secondary:hover {
     box-shadow: 0 0.375em 0.5em rgba(0, 0, 0, 0.2), 
                 0 0.125em 0.125em rgba(0, 0, 0, 0.3),  
                 inset 0 0.25em 0.25em rgba(0, 0, 0, 0.4),
@@ -50,7 +50,7 @@
                 0 0 0.5em rgba(0, 0, 0, 0.25);
 }
 
-.settings button::before {
+#settings button::before {
     content: '';
     position: absolute;
     left: 50%;
@@ -64,7 +64,7 @@
     z-index: 2;
 }
 
-.settings button::after {
+#settings button::after {
     content: '';
     position: absolute;
     left: 50%;
@@ -77,7 +77,7 @@
     filter: blur(3px);
 }
 
-.settings button span {
+#settings button span {
     position: relative;
     top: -1px;
     z-index: 1;  
@@ -86,10 +86,10 @@
     -webkit-text-stroke-color: #000000;
 }
 
-.settings button.primary span {
+#settings button.primary span {
     text-shadow: 0 0.25em 0.2em rgba(30, 77, 161, 0.5);
 }
 
-.settings button.secondary span {
+#settings button.secondary span {
     text-shadow: 0 0.25em 0.2em rgba(0, 0, 0, 0.25);
 }

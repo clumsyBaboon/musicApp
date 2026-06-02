@@ -41,7 +41,7 @@ const createWindow = () => {
 
   win.setMenuBarVisibility(false);
   win.loadFile('./landing/index.html')
-//   win.webContents.openDevTools();
+  win.webContents.openDevTools();
 }
 
 async function sendPOST(url, data) {
