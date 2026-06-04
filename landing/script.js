@@ -217,9 +217,31 @@ function findSelectedNumber(queue) {
 //SETINGS
 const settingsMenu = document.querySelector("#settings");
 let isSettingsOpen = false;
+let config;
 
 function openSettings() {
     if (isSettingsOpen) return;
     isSettingsOpen = true;
-    settingsMenu.style.animation = "openSettings 250ms linear forwards";
+    settingsMenu.style.animation = "openSettings 300ms ease-in-out forwards";
+    console.log(config.autoConnect);
+    document.querySelector("#autoConnectAtStart").checked = config.autoConnect;
+    document.querySelector("#settings-wrapper").style.backgroundColor = "rgba(0, 0, 0, 30%)";
+    document.querySelector("#settings-wrapper").style.pointerEvents = "auto";
 }
+
+function settings_close() {
+    isSettingsOpen = false;
+    settingsMenu.style.animation = "closeSettings 300ms ease-in-out forwards";
+    document.querySelector("#settings-wrapper").style.backgroundColor = "rgba(0, 0, 0, 0%)";
+    document.querySelector("#settings-wrapper").style.pointerEvents = "none";
+}
+
+function settings_save() {
+    const data = {
+        autoConnect: document.querySelector("#autoConnectAtStart").checked
+    }
+    config = data;
+    window.electronAPI.updateSettings(data);
+}
+
+window.electronAPI.onConfigFile(data => config = data);

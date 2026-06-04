@@ -1,4 +1,4 @@
-const { ipcMain } = require('electron');
+const { ipcMain, dialog } = require('electron');
 const { app, BrowserWindow } = require('electron/main');
 const fs = require("fs");
 const path = require("path");
@@ -8,6 +8,9 @@ const { send } = require('process');
 const VERSION = pkg.version;
 const appId = "clumsybaboon-musicapp";
 
+let config = {
+    "autoConnect": false
+}
 let TOKEN = "";
 
 const SERVER_URL_WS = "http://127.0.0.1:9863/api/v1/realtime";
@@ -17,10 +20,11 @@ function print(data, state) {
     switch (state) {
         case "log":
         case undefined:
-            console.log(`[${__filename}] [${VERSION}] ${data}`);
+            console.log(`[${__filename}] [${VERSION}]`, data);
             break;
         case "err":
-            console.error(`[${__filename}] [${VERSION}] ${data}`);
+            console.error(`[${__filename}] [${VERSION}]`, data);
+            dialog.showErrorBox("Error", data);
             break;
     }
 }
@@ -42,7 +46,7 @@ const createWindow = () => {
 
   win.setMenuBarVisibility(false);
   win.loadFile('./landing/index.html')
-  win.webContents.openDevTools();
+//   win.webContents.openDevTools();
 }
 
 async function sendPOST(url, data) {
@@ -83,6 +87,22 @@ app.whenReady().then(() => {
   } catch (err) {
     print(`Error in reading token file: ${err}`, "err");
   }
+
+  try {
+    const filePath = path.join(app.getPath("userData"), "config.json");
+    if (fs.existsSync(filePath)) {
+        const data = fs.readFileSync(filePath, "utf-8");
+        config = JSON.parse(data);
+        print("Config file was successfully read");
+    } else print("Config file doesn't exist", "err");
+  } catch (err) {
+    print(`Error in reading config file: ${err}`, "err");
+  }
+  print(config);
+  win.webContents.on("did-finish-load", () => {
+    win.webContents.send("config-file", config);
+    if (config.autoConnect) connectWS();
+  })
 })
 
 app.on('window-all-closed', () => {
@@ -119,6 +139,7 @@ ipcMain.on("connect-api", async event => {
         CODE = await result.code;
     } catch (err) {
         print(`Error in fetch: ${err}`, "err");
+        return;
     }
     print(`CODE: ${CODE}`);
 
@@ -149,19 +170,29 @@ ipcMain.on("connect-api", async event => {
         TOKEN_buffer = await result.token;
     } catch (err) {
         print(`Error in fetch: ${err}`, "err");
+        return;
     }
     print(`TOKEN: ${TOKEN_buffer}`);
     TOKEN = TOKEN_buffer;
     try {
         const filePath = path.join(app.getPath("userData"), "token.txt");
         fs.writeFileSync(filePath, TOKEN, "utf-8");
-        print("Token file saved");
+        print("Token file was saved");
     } catch (err) {
         print(`Error in saving token file: ${err}`, "err");
+        return;
     }
+    dialog.showMessageBox(win, {
+        type: "info",
+        title: "Info",
+        message: "Token was successfully updated and saved",
+        buttons: ["Close"]
+    })
 })
 
-ipcMain.on("connect-ws", event => {
+ipcMain.on("connect-ws", connectWS);
+
+function connectWS() {
     print("Connecting to WS server...");
     socket = io(SERVER_URL_WS, {
         transports: ["websocket"],
@@ -202,7 +233,7 @@ ipcMain.on("connect-ws", event => {
     socket.on("state-update", state => {
         win.webContents.send("state-update", state);
     })
-})
+}
 
 ipcMain.on("change-music", async (event, data) => {
     print(`Change music to VideoId: ${data.videoId}, playlistId: ${data.playlistId}`);
@@ -241,5 +272,24 @@ ipcMain.on("next", async () => {
     print("Next video");
     sendPOST("http://localhost:9863/api/v1/command", {
         "command": "next"
+    })
+})
+
+ipcMain.on("update-settings", (event, data) => {
+    print("Updating settings");
+    config = data;
+    try {
+        const filePath = path.join(app.getPath("userData"), "config.json");
+        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+        print("Config file was saved");
+    } catch (err) {
+        print(`Error in saving config file: ${err}`, "err");
+        return;
+    }
+    dialog.showMessageBox(win, {
+        type: "info",
+        title: "Info",
+        message: "Settings were successfully updated and saved",
+        buttons: ["Close"]
     })
 })

@@ -9,11 +9,24 @@
     <link rel="stylesheet" href="aqua-design.css">
 </head>
 <body>
-    <div id="settings">
-        <h2>Auto Connect</h2>
-        <input type="checkbox">
+    <div id="settings-wrapper">
+        <div id="settings">
+            <h2>Auto connect at start</h2>
+            <input type="checkbox" id="autoConnectAtStart">
 
-        <button class="secondary">Save</button>
+            <button class="secondary" onclick="settings_save()" style="grid-column: span 2;">&nbsp;&nbsp;&nbsp;&nbsp; Save &nbsp;&nbsp;&nbsp;&nbsp;</button>
+
+            <h2>Get token</h2>
+            <button class="secondary" onclick="connect_api()">Get</button>
+
+            <h2>Connect to YTM Desktop</h2>
+            <button class="secondary" onclick="connect_ws()">Connect</button>
+
+            <h2>Open fullscreen</h2>
+            <button class="secondary" onclick="fullscreen()">Open</button>
+
+            <button class="primary" onclick="settings_close()" style="grid-column: span 2;">&nbsp;&nbsp;&nbsp;&nbsp; Close &nbsp;&nbsp;&nbsp;&nbsp;</button>
+        </div>
     </div>
 
     <div class="music-playback-wrapper">
@@ -56,12 +69,7 @@
     <button class="settings-btn" onclick="openSettings()">Settings</button>
     
     <!--  -->
-    <button class="_left" onclick="loop(-1)">LEFT</button>
-    <button class="_right" onclick="loop(1)">RIGHT</button>
-    <button class="_lyrics" onclick="lyrics()">LYRICS</button>
-    <button class="_fullscreen" onclick="fullscreen()">FULLSCREEN</button>
-    <button class="_connect_api" onclick="connect_api()">CONNECT API</button>
-    <button class="_connect_ws" onclick="connect_ws()">CONNECT TO WebSocket SERVER</button>
+    <!-- <button class="_lyrics" onclick="lyrics()">LYRICS</button> -->
     <!--  -->
 
     <script src="script.js"></script>
