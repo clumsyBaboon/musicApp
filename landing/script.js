@@ -221,5 +221,5 @@ let isSettingsOpen = false;
 function openSettings() {
     if (isSettingsOpen) return;
     isSettingsOpen = true;
-    settingsMenu.style.animation = "openSettings 250ms linear forwards"
+    settingsMenu.style.animation = "openSettings 250ms linear forwards";
 }

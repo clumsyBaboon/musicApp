@@ -12,3 +12,5 @@ git push
 
 echo ---done---
 pause
+
+git clone https://github.com/example.git

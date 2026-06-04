@@ -6,6 +6,7 @@ const { io } = require("socket.io-client");
 const pkg = require("./package.json");
 const { send } = require('process');
 const VERSION = pkg.version;
+const appId = "clumsybaboon-musicapp";
 
 let TOKEN = "";
 
@@ -64,7 +65,7 @@ async function sendPOST(url, data) {
 }
 
 app.whenReady().then(() => {
-  createWindow()
+  createWindow();
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
@@ -95,7 +96,7 @@ ipcMain.on("connect-api", async event => {
     //requestcode
     const url1 = "http://localhost:9863/api/v1/auth/requestcode";
     const data1 = {
-        "appId": pkg.build.appId,
+        "appId": appId,
         "appName": pkg.name,
         "appVersion": VERSION
     }
@@ -124,7 +125,7 @@ ipcMain.on("connect-api", async event => {
     //request
     const url2 = "http://localhost:9863/api/v1/auth/request";
     const data2 = {
-        "appId": pkg.build.appId,
+        "appId": appId,
         "appName": pkg.name,
         "appVersion": VERSION,
         "code": CODE
