@@ -3,7 +3,6 @@ const { contextBridge, ipcRenderer } = require("electron");
 contextBridge.exposeInMainWorld("electronAPI", {
     connectAPI: () => ipcRenderer.send("connect-api"),
     connectWS: () => ipcRenderer.send("connect-ws"),
-    changeMusic: data => ipcRenderer.send("change-music", data),
     changeTimeline: data => ipcRenderer.send("change-timeline", data),
     next: () => ipcRenderer.send("next"),
     prev: () => ipcRenderer.send("prev"),

@@ -2,56 +2,47 @@ const list = [
     {
         name: "photo1",
         pos: -4,
-        needChange: true,
-        videoId: null
+        needChange: true
     },
     {
         name: "photo2",
         pos: -3,
-        needChange: true,
-        videoId: null
+        needChange: true
     },
     {
         name: "photo3",
         pos: -2,
-        needChange: true,
-        videoId: null
+        needChange: true
     },
     {
         name: "photo4",
         pos: -1,
-        needChange: true,
-        videoId: null
+        needChange: true
     },
     {
         name: "photo5",
         pos: 0,
-        needChange: true,
-        videoId: null
+        needChange: true
     },
     {
         name: "photo6",
         pos: 1,
-        needChange: true,
-        videoId: null
+        needChange: true
     },
     {
         name: "photo7",
         pos: 2,
-        needChange: true,
-        videoId: null
+        needChange: true
     },
     {
         name: "photo8",
         pos: 3,
-        needChange: true,
-        videoId: null
+        needChange: true
     },
     {
         name: "photo9",
         pos: 4,
-        needChange: true,
-        videoId: null
+        needChange: true
     },
 ]
 
@@ -77,10 +68,6 @@ function loop(times) {
 
 function loop_from_site(value) {
     for (const element of list) if (element.name == `photo${value}` && !element.needChange && element.pos != 0) {
-        // window.electronAPI.changeMusic({
-        //     videoId: element.videoId,
-        //     playlistId: playlistId
-        // })
         window.electronAPI.playQueueIndex(playingNumber + element.pos);
         return;
     }
@@ -181,11 +168,9 @@ function updateScreen(state) {
                         const thumbnails = player.queue.items[playingNumberTemp + element.pos].thumbnails;
                         document.querySelector(`#${element.name}`).style.backgroundImage = `url(${thumbnails[thumbnails.length - 1].url})`;
                         element.needChange = false;
-                        element.videoId = player.queue.items[playingNumberTemp + element.pos].videoId;
                     } else {
                         document.querySelector(`#${element.name}`).style.backgroundImage = "var(--default-album-photo)";
                         element.needChange = true;
-                        element.videoId = null;
                     }
                 }
             })
@@ -199,11 +184,9 @@ function updateScreen(state) {
                 const thumbnails = player.queue.items[playingNumberTemp + element.pos].thumbnails;
                 document.querySelector(`#${element.name}`).style.backgroundImage = `url(${thumbnails[thumbnails.length - 1].url})`;
                 element.needChange = false;
-                element.videoId = player.queue.items[playingNumberTemp + element.pos].videoId;
             } else {
                 document.querySelector(`#${element.name}`).style.backgroundImage = "var(--default-album-photo)";
                 element.needChange = true;
-                element.videoId = null;
             }
         })
         lastQueue = player.queue.items;

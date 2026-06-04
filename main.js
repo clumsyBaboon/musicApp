@@ -235,17 +235,6 @@ function connectWS() {
     })
 }
 
-ipcMain.on("change-music", async (event, data) => {
-    print(`Change music to VideoId: ${data.videoId}, playlistId: ${data.playlistId}`);
-    sendPOST("http://localhost:9863/api/v1/command", {
-        "command": "changeVideo",
-        "data": {
-            "videoId": data.videoId,
-            "playlistId": data.playlistId
-        }
-    })
-})
-
 ipcMain.on("change-timeline", async (event, data) => {
     print(`Change timeline to ${data}`);
     sendPOST("http://localhost:9863/api/v1/command", {
