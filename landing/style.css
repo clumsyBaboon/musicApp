@@ -4,6 +4,7 @@
     --open-lyrics-opacity: 1;
     --show-control-opacity: 0;
     --default-album-photo: linear-gradient(to bottom, #ffffff85, #000000a3);
+    --left-position-album-photo: calc(50vw - var(--album-photo-size) / 2);
 }
 
 *{
@@ -36,7 +37,7 @@ body{
     max-width: 602px;
     max-height: 602px;
     background-size: cover;
-    margin-top: -43vh;
+    top: 10vh;
     position: absolute;
     border: 2px solid rgba(255, 255, 255, 0.5);
     box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 50%), 0px 0px 15px 15px rgba(0, 0, 0, 80%);
@@ -47,10 +48,12 @@ body{
         z-index 600ms,
         width 600ms,
         height 600ms,
-        filter 300ms
+        filter 300ms,
+        left 600ms
     ;
     background-image: var(--default-album-photo);
     cursor: pointer;
+    left: var(--left-position-album-photo);
 }
 .album-photo:hover{
     filter: brightness(1.2);
@@ -156,19 +159,21 @@ body{
     position: absolute;
     color: rgba(255, 255, 255, 60%);
     font-size: 2vh;
-    top: 56vh;
+    top: calc(10vh + var(--album-photo-size) + 10vh);
     z-index: 20;
     letter-spacing: 5%;
     font-weight: 500;
+    transition: top 600ms, left 600ms, opacity 400ms;
 }
 #music-author{
     position: absolute;
     color: rgba(255, 255, 255, 40%);
     font-size: 1.5vh;
-    top: 60vh;
+    top: calc(10vh + var(--album-photo-size) + 14vh);
     z-index: 20;
     letter-spacing: 5%;
     font-weight: 300;
+    transition: top 600ms, left 600ms, opacity 400ms;
 }
 #music-name, #music-author{
     max-width: calc(var(--album-photo-size) * 0.6);
@@ -178,9 +183,9 @@ body{
 }
 .music-range-wrapper{
     width: calc(var(--album-photo-size) * 0.9);
-    transition: width 600ms, height 600ms;
+    transition: width 600ms, height 600ms, top 600ms, left 600ms, opacity 400ms;
     position: absolute;
-    top: 64vh;
+    top: calc(10vh + var(--album-photo-size) + 18vh);
     display: flex;
     justify-content: space-between;
     z-index: 20;
@@ -217,10 +222,10 @@ body{
 .control-buttons-wrapper{
     width: calc(var(--album-photo-size) * 0.7);
     height: calc(var(--album-photo-size) * 0.2);
-    transition: width 600ms, height 600ms;
+    transition: width 600ms, height 600ms, left 600ms, top 600ms, opacity 400ms;
     position: absolute;
     z-index: 20;
-    top: 68vh;
+    top: calc(10vh + var(--album-photo-size) + 22vh);
     display: flex;
     justify-content: space-between;
 }
@@ -259,7 +264,6 @@ body{
 }
 .show-control-opacity{
     opacity: var(--show-control-opacity);
-    transition: opacity 400ms;
 }
 .settings-btn{
     position: absolute;
@@ -298,7 +302,7 @@ body{
     background: repeating-linear-gradient(#F0F0F0, #F0F0F0 4px, #FFFFFF 4px, #FFFFFF 8px);
     z-index: 39;
     top: -480px;
-    border-radius: 5px;
+    border-radius: 2px;
     border: 2px solid rgba(255, 255, 255, 0.5);
     box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 50%), 0px 0px 15px 15px rgba(0, 0, 0, 80%);
     display: grid;

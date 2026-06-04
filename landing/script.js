@@ -94,10 +94,10 @@ function command_play_pause() { window.electronAPI.playPause() }
 let openedLyrics = false;
 function lyrics() {
     openedLyrics = !openedLyrics;
-    document.querySelector(".music-playback-wrapper").style.width = `${openedLyrics ? 70 : 100}%`;
-    document.querySelector(".music-playback-wrapper").style.left = openedLyrics ? "-20%" : "0";
+    document.querySelector(".music-playback-wrapper").style.width = `${openedLyrics ? 50 : 100}%`;
     document.documentElement.style.setProperty("--open-lyrics-opacity", openedLyrics ? "0" : "1");
-    document.documentElement.style.setProperty("--album-photo-size", openedLyrics ? "33vh" : "43vh")
+    document.documentElement.style.setProperty("--album-photo-size", openedLyrics ? "33vh" : "43vh");
+    document.documentElement.style.setProperty("--left-position-album-photo", openedLyrics ? "calc(var(--album-photo-size) * 0.1 )" : "calc(50vw - var(--album-photo-size) / 2)");
 
 }
 
@@ -225,7 +225,7 @@ function openSettings() {
     settingsMenu.style.animation = "openSettings 300ms ease-in-out forwards";
     console.log(config.autoConnect);
     document.querySelector("#autoConnectAtStart").checked = config.autoConnect;
-    document.querySelector("#settings-wrapper").style.backgroundColor = "rgba(0, 0, 0, 30%)";
+    document.querySelector("#settings-wrapper").style.backgroundColor = "rgba(0, 0, 0, 50%)";
     document.querySelector("#settings-wrapper").style.pointerEvents = "auto";
 }
 
