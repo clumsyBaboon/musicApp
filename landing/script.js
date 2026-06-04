@@ -76,11 +76,12 @@ function loop(times) {
 }
 
 function loop_from_site(value) {
-    for (const element of list) if (element.name == `photo${value}` && !element.needChange && element.pos != 0 && element.videoId != null && playlistId != null) {
-        window.electronAPI.changeMusic({
-            videoId: element.videoId,
-            playlistId: playlistId
-        })
+    for (const element of list) if (element.name == `photo${value}` && !element.needChange && element.pos != 0) {
+        // window.electronAPI.changeMusic({
+        //     videoId: element.videoId,
+        //     playlistId: playlistId
+        // })
+        window.electronAPI.playQueueIndex(playingNumber + element.pos);
         return;
     }
 }
@@ -176,7 +177,7 @@ function updateScreen(state) {
         if (playlistIdTemp == playlistId) {
             list.forEach(element => {
                 if (element.needChange) {
-                    if (playingNumberTemp + element.pos >= 0) {
+                    if (playingNumberTemp + element.pos >= 0 && playingNumberTemp + element.pos < player.queue.items.length) {
                         const thumbnails = player.queue.items[playingNumberTemp + element.pos].thumbnails;
                         document.querySelector(`#${element.name}`).style.backgroundImage = `url(${thumbnails[thumbnails.length - 1].url})`;
                         element.needChange = false;
@@ -194,7 +195,7 @@ function updateScreen(state) {
     if (playlistIdTemp != playlistId || lastQueue != player.queue.items) {
         playlistId = playlistIdTemp;
         list.forEach(element => {
-            if (playingNumberTemp + element.pos >= 0) {
+            if (playingNumberTemp + element.pos >= 0 && playingNumberTemp + element.pos < player.queue.items.length) {
                 const thumbnails = player.queue.items[playingNumberTemp + element.pos].thumbnails;
                 document.querySelector(`#${element.name}`).style.backgroundImage = `url(${thumbnails[thumbnails.length - 1].url})`;
                 element.needChange = false;

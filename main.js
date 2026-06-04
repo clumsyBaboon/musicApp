@@ -293,3 +293,11 @@ ipcMain.on("update-settings", (event, data) => {
         buttons: ["Close"]
     })
 })
+
+ipcMain.on("play-queue-index", (event, data) => {
+    print(`Change video to ${data} (index in Queue)`);
+    sendPOST("http://localhost:9863/api/v1/command", {
+        "command": "playQueueIndex",
+        "data": data
+    })
+})
