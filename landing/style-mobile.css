@@ -1,5 +1,5 @@
 @media (orientation: portrait) {
     :root{
-        --album-photo-size: 33vh;
+        --album-photo-size: calc(33vh - var(--album-photo-decrease) / 2);
     }
 }

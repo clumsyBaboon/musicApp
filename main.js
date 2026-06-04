@@ -83,7 +83,7 @@ app.whenReady().then(() => {
         const data = fs.readFileSync(filePath, "utf-8");
         TOKEN = data;
         print("Token file was successfully read");
-    } else print("Token file doesn't exist", "err");
+    } else print("Token file doesn't exist");
   } catch (err) {
     print(`Error in reading token file: ${err}`, "err");
   }
@@ -94,7 +94,7 @@ app.whenReady().then(() => {
         const data = fs.readFileSync(filePath, "utf-8");
         config = JSON.parse(data);
         print("Config file was successfully read");
-    } else print("Config file doesn't exist", "err");
+    } else print("Config file doesn't exist");
   } catch (err) {
     print(`Error in reading config file: ${err}`, "err");
   }

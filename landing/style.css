@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 :root{
-    --album-photo-size: 43vh;
+    --album-photo-decrease: 0vh;
+    --album-photo-size: calc(43vh - var(--album-photo-decrease));
     --open-lyrics-opacity: 1;
     --show-control-opacity: 0;
     --default-album-photo: linear-gradient(to bottom, #ffffff85, #000000a3);

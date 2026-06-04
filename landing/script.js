@@ -96,7 +96,7 @@ function lyrics() {
     openedLyrics = !openedLyrics;
     document.querySelector(".music-playback-wrapper").style.width = `${openedLyrics ? 50 : 100}%`;
     document.documentElement.style.setProperty("--open-lyrics-opacity", openedLyrics ? "0" : "1");
-    document.documentElement.style.setProperty("--album-photo-size", openedLyrics ? "33vh" : "43vh");
+    document.documentElement.style.setProperty("--album-photo-decrease", openedLyrics ? "10vh" : "0vh");
     document.documentElement.style.setProperty("--left-position-album-photo", openedLyrics ? "calc(var(--album-photo-size) * 0.1 )" : "calc(50vw - var(--album-photo-size) / 2)");
 
 }
