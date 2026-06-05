@@ -40,31 +40,34 @@
         <div class="album-photo pos3" id="photo8" onclick="loop_from_site(8)"></div>
         <div class="album-photo pos4" id="photo9" onclick="loop_from_site(9)"></div>
 
-        <h1 id="music-name" class="show-control-opacity">Name</h1>
-        <h2 id="music-author" class="show-control-opacity">Author</h2>
-        <div class="music-range-wrapper show-control-opacity">
-            <p id="duration-now">0:00</p>
-            <input type="range" id="music-range" min="0" max="1000" value="0">
-            <p id="duration-left">-3:28</p>
+        <div class="wrapper">
+            <h1 id="music-name" class="show-control-opacity">Name</h1>
+            <h2 id="music-author" class="show-control-opacity">Author</h2>
+            <div class="music-range-wrapper show-control-opacity">
+                <p id="duration-now">0:00</p>
+                <input type="range" id="music-range" min="0" max="1000" value="0">
+                <p id="duration-left">-3:28</p>
+            </div>
+            <div class="control-buttons-wrapper show-control-opacity">
+                <button class="btn" id="btn-prev" onclick="command_prev()">
+                    <svg class="" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path>
+                    </svg>
+                </button>
+                <button class="btn" id="btn-stop-play" onclick="command_play_pause()">
+                    <svg class="" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" id="play-pause-svg"></path>
+                        <!-- M6 19h4V5H6v14zm8-14v14h4V5h-4z -->
+                    </svg>
+                </button>
+                <button class="btn" id="btn-next" onclick="command_next()">
+                    <svg class="" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
-        <div class="control-buttons-wrapper show-control-opacity">
-            <button class="btn" id="btn-prev" onclick="command_prev()">
-                <svg class="" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path>
-                </svg>
-            </button>
-            <button class="btn" id="btn-stop-play" onclick="command_play_pause()">
-                <svg class="" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" id="play-pause-svg"></path>
-                    <!-- M6 19h4V5H6v14zm8-14v14h4V5h-4z -->
-                </svg>
-            </button>
-            <button class="btn" id="btn-next" onclick="command_next()">
-                <svg class="" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path>
-                </svg>
-            </button>
-        </div>
+        
     </div>
     <button class="settings-btn" onclick="openSettings()">Settings</button>
     

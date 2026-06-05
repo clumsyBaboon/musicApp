@@ -6,6 +6,7 @@
     --show-control-opacity: 0;
     --default-album-photo: linear-gradient(to bottom, #ffffff85, #000000a3);
     --left-position-album-photo: calc(50vw - var(--album-photo-size) / 2);
+    --music-control-wrapper-left: calc(50vw - var(--album-photo-size) * 0.45);
 }
 
 *{
@@ -21,9 +22,6 @@ body{
 .music-playback-wrapper{
     width: 100%;
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     perspective: 1400px;
     transition: width 700ms;
     overflow: hidden;
@@ -156,25 +154,33 @@ body{
     z-index: 6;
 }
 
-#music-name{
+.music-playback-wrapper .wrapper{
+    width: calc(var(--album-photo-size) * 0.9);
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2vh;
     position: absolute;
+    top: calc(10vh + var(--album-photo-size) + 10vh);
+    left: var(--music-control-wrapper-left);
+    transition: top 600ms, left 600ms;
+}
+#music-name{
     color: rgba(255, 255, 255, 60%);
     font-size: 2vh;
-    top: calc(10vh + var(--album-photo-size) + 10vh);
     z-index: 20;
     letter-spacing: 5%;
     font-weight: 500;
-    transition: top 600ms, left 600ms, opacity 400ms;
+    transition: opacity 400ms;
 }
 #music-author{
-    position: absolute;
     color: rgba(255, 255, 255, 40%);
     font-size: 1.5vh;
-    top: calc(10vh + var(--album-photo-size) + 14vh);
     z-index: 20;
     letter-spacing: 5%;
     font-weight: 300;
-    transition: top 600ms, left 600ms, opacity 400ms;
+    transition: opacity 400ms;
 }
 #music-name, #music-author{
     max-width: calc(var(--album-photo-size) * 0.6);
@@ -184,9 +190,7 @@ body{
 }
 .music-range-wrapper{
     width: calc(var(--album-photo-size) * 0.9);
-    transition: width 600ms, height 600ms, top 600ms, left 600ms, opacity 400ms;
-    position: absolute;
-    top: calc(10vh + var(--album-photo-size) + 18vh);
+    transition: width 600ms, height 600ms, opacity 400ms;
     display: flex;
     justify-content: space-between;
     z-index: 20;
@@ -223,10 +227,8 @@ body{
 .control-buttons-wrapper{
     width: calc(var(--album-photo-size) * 0.7);
     height: calc(var(--album-photo-size) * 0.2);
-    transition: width 600ms, height 600ms, left 600ms, top 600ms, opacity 400ms;
-    position: absolute;
+    transition: width 600ms, height 600ms, opacity 400ms;
     z-index: 20;
-    top: calc(10vh + var(--album-photo-size) + 22vh);
     display: flex;
     justify-content: space-between;
 }
