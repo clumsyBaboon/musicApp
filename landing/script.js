@@ -54,6 +54,10 @@ let videoDuration;
 
 let lastQueue;
 
+let lyrics_list = null;
+let last = null;
+let openedLyrics = false;
+
 function loop(times) {
     list.forEach(element => {
         element.pos += times;
@@ -79,14 +83,23 @@ function command_prev() { window.electronAPI.prev() }
 
 function command_play_pause() { window.electronAPI.playPause() }
 
-let openedLyrics = false;
 function lyrics() {
     openedLyrics = !openedLyrics;
     document.querySelector(".music-playback-wrapper").style.width = `${openedLyrics ? 50 : 100}%`;
     document.documentElement.style.setProperty("--open-lyrics-opacity", openedLyrics ? "0" : "1");
     document.documentElement.style.setProperty("--album-photo-decrease", openedLyrics ? "10vh" : "0vh");
-    document.documentElement.style.setProperty("--left-position-album-photo", openedLyrics ? "calc(var(--album-photo-size) * 0.1 )" : "calc(50vw - var(--album-photo-size) / 2)");
-    document.documentElement.style.setProperty("--music-control-wrapper-left", openedLyrics ? "calc(var(--album-photo-size) * 0.15 )" : "calc(50vw - var(--album-photo-size) * 0.45)")
+    document.documentElement.style.setProperty("--left-position-album-photo", openedLyrics ? "calc(var(--album-photo-size) * 0.3 )" : "calc(50vw - var(--album-photo-size) / 2)");
+    document.documentElement.style.setProperty("--music-control-wrapper-left", openedLyrics ? "calc(var(--album-photo-size) * 0.35 )" : "calc(50vw - var(--album-photo-size) * 0.45)");
+    
+    document.querySelector(".lyrics-wrapper").style.opacity = openedLyrics ? "1" : "0";
+    if (openedLyrics) {
+        const data = [
+            ui.songName,
+            ui.authorName,
+            ui.duration
+        ]
+        window.electronAPI.requireLyrics(data);
+    }
 }
 
 function fullscreen() {
@@ -108,6 +121,20 @@ function updateMusicRange() {
     document.querySelector("#music-range").style.background = `linear-gradient(to right, rgba(255, 255, 255, 30%) 0%, white ${value}%, rgba(255, 255, 255, 30%) ${value}%, rgba(255, 255, 255, 30%) 100%)`;
 }
 
+function updateLyrics(videoProg) {
+    if (lyrics_list == null) return;
+    const pElements = document.querySelectorAll(".lyrics-wrapper p");
+    let lastTemp = 0;
+    for (let i = 0; i < lyrics_list.length; i++) {
+        if (lyrics_list[i][0] <= videoProg) {
+            pElements[i].className = "active";
+            lastTemp = i;
+        } else pElements[i].className = "";
+    }
+    if (lastTemp != last) pElements[lastTemp].scrollIntoView({ block: "center", behavior: "smooth" });
+    last = lastTemp;
+}
+
 function connect_api() {
     window.electronAPI.connectAPI();
 }
@@ -117,7 +144,7 @@ function connect_ws() {
 }
 
 window.electronAPI.getState(state => {
-    console.log(state);
+    // console.log(state);
     updateScreen(state);
 });
 
@@ -129,6 +156,18 @@ window.electronAPI.onWSDisconnected(() => {
     document.documentElement.style.setProperty("--show-control-opacity", "0");
 })
 
+window.electronAPI.onLyrics(lyr => {
+    if (lyrics_list == lyr) return;
+    lyrics_list = lyr;
+    document.querySelectorAll(".lyrics-wrapper p").forEach(element => element.remove());
+    const lyricsWrapper = document.querySelector(".lyrics-wrapper");
+    lyr.forEach(element => {
+        const newElement = document.createElement('p');
+        newElement.textContent = element[1];
+        lyricsWrapper.insertBefore(newElement, lyricsWrapper.lastElementChild);
+    })
+})
+
 function secToMin(sec) {
     const minutes = Math.floor(sec / 60);
     const seconds = Math.floor(sec) % 60;
@@ -138,11 +177,21 @@ function secToMin(sec) {
 
 const ui = {
     set songName(name) { document.querySelector("#music-name").textContent = name },
+    get songName() { return document.querySelector("#music-name").textContent },
     set authorName(name) { document.querySelector("#music-author").textContent = name },
+    get authorName() { return document.querySelector("#music-author").textContent },
     set durationNow(value) { document.querySelector("#duration-now").textContent = value },
     set durationLeft(value) { document.querySelector("#duration-left").textContent = value },
     set timeline(value) { document.querySelector("#music-range").value = value },
-    set playPause(value) { document.querySelector("#play-pause-svg").setAttribute("d", value ? "M6 19h4V5H6v14zm8-14v14h4V5h-4z" : "M8 5v14l11-7z") }
+    set playPause(value) { document.querySelector("#play-pause-svg").setAttribute("d", value ? "M6 19h4V5H6v14zm8-14v14h4V5h-4z" : "M8 5v14l11-7z") },
+    duration: 0
+}
+
+function strToNumLyr(str) {
+    const posDots = str.indexOf(':');
+    const min = Number(str.slice(0, posDots));
+    const sec = Number(str.slice(posDots + 1));
+    return min * 60 + sec;
 }
 
 function updateScreen(state) {
@@ -157,9 +206,19 @@ function updateScreen(state) {
     if (!isCursorDragging) ui.timeline = Math.floor(player.videoProgress / state.video.durationSeconds * document.querySelector("#music-range").max);
     videoDuration = state.video.durationSeconds;
     updateMusicRange();
+    if (openedLyrics) updateLyrics(player.videoProgress);
     if (playingNumberTemp != playingNumber) {
         ui.songName = player.queue.items[playingNumberTemp].title;
         ui.authorName = player.queue.items[playingNumberTemp].author;
+        ui.duration = strToNumLyr(player.queue.items[playingNumberTemp].duration);
+        lyrics_list = null;
+        last = null;
+        document.querySelectorAll(".lyrics-wrapper p").forEach(element => element.remove());
+        const lyricsWrapper = document.querySelector(".lyrics-wrapper");
+        const newElement = document.createElement('p');
+        newElement.className = "active";
+        newElement.textContent = "Loading...";
+        lyricsWrapper.insertBefore(newElement, lyricsWrapper.lastElementChild);
         if (playlistIdTemp == playlistId && playingNumber - playingNumberTemp != 0) loop(playingNumber - playingNumberTemp);
         if (playlistIdTemp == playlistId) {
             list.forEach(element => {
@@ -174,6 +233,14 @@ function updateScreen(state) {
                     }
                 }
             })
+        }
+        if (openedLyrics) {
+            const data = [
+                ui.songName,
+                ui.authorName,
+                ui.duration
+            ]
+            window.electronAPI.requireLyrics(data);
         }
     }
     playingNumber = playingNumberTemp;

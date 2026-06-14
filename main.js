@@ -106,9 +106,8 @@ app.whenReady().then(() => {
 })
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+    socket.disconnect();
     app.quit()
-  }
 })
 
 ipcMain.on("connect-api", async event => {
@@ -223,11 +222,14 @@ function connectWS() {
         }
     })
 
-    socket.on("connect_error", err => print(`Error in Socket.io: ${err}`, "err"));
+    socket.on("connect_error", err => {
+        print(`Error in Socket.io: ${err}`, "err");
+        socket.disconnect();
+    });
 
     socket.on("disconnect", reason => {
         print(`Socket.io closed, reason: ${reason}`);
-        win.webContents.send("ws-disconnected");
+        if (win && !win.isDestroyed()) win.webContents.send("ws-disconnected");
     });
 
     socket.on("state-update", state => {
@@ -289,4 +291,39 @@ ipcMain.on("play-queue-index", (event, data) => {
         "command": "playQueueIndex",
         "data": data
     })
+})
+
+function strToNumLyr(str) {
+    const posDots = str.indexOf(':');
+    const min = Number(str.slice(0, posDots));
+    const sec = Math.round(Number(str.slice(posDots + 1)));
+    return min * 60 + sec;
+}
+
+ipcMain.on("require-lyrics", async (event, data) => {
+    print("Require lyrics");
+    const url = "https://lrclib.net/api/get";
+    const data_send = new URLSearchParams({
+        track_name: data[0],
+        artist_name: data[1],
+        duration: data[2]
+    })
+    try {
+        const response = await fetch(`${url}?${data_send}`);
+        if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(`Status: ${response.status} - ${errText}`);
+        }
+        const res = (await response.json()).syncedLyrics.split('\n').map(element => {
+            const posOpen = element.indexOf("[") + 1;
+            const posClose = element.indexOf("]");
+            const time = strToNumLyr(element.slice(posOpen, posClose));
+            const lyr = element.slice(posClose + 2);
+            return [time, lyr];
+        });
+        win.webContents.send("lyrics-update", res);
+        print("Lyrics were send to renderer");
+    } catch (err) {
+        print(`Error in fetch: ${err}`);
+    }
 })
