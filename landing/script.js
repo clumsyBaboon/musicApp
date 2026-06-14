@@ -54,6 +54,7 @@ let videoDuration;
 
 let lastQueue;
 
+let lyrics_type = null;
 let lyrics_list = null;
 let last = null;
 let openedLyrics = false;
@@ -88,8 +89,8 @@ function lyrics() {
     document.querySelector(".music-playback-wrapper").style.width = `${openedLyrics ? 50 : 100}%`;
     document.documentElement.style.setProperty("--open-lyrics-opacity", openedLyrics ? "0" : "1");
     document.documentElement.style.setProperty("--album-photo-decrease", openedLyrics ? "10vh" : "0vh");
-    document.documentElement.style.setProperty("--left-position-album-photo", openedLyrics ? "calc(var(--album-photo-size) * 0.3 )" : "calc(50vw - var(--album-photo-size) / 2)");
-    document.documentElement.style.setProperty("--music-control-wrapper-left", openedLyrics ? "calc(var(--album-photo-size) * 0.35 )" : "calc(50vw - var(--album-photo-size) * 0.45)");
+    document.documentElement.style.setProperty("--left-position-album-photo", openedLyrics ? "calc(var(--album-photo-size) * 0.5 )" : "calc(50vw - var(--album-photo-size) / 2)");
+    document.documentElement.style.setProperty("--music-control-wrapper-left", openedLyrics ? "calc(var(--album-photo-size) * 0.55 )" : "calc(50vw - var(--album-photo-size) * 0.45)");
     
     document.querySelector(".lyrics-wrapper").style.opacity = openedLyrics ? "1" : "0";
     if (openedLyrics) {
@@ -116,13 +117,17 @@ document.querySelector("#music-range").addEventListener('change', () => {
 })
 window.onload = () => updateMusicRange();
 
+function moveTo(value) {
+    window.electronAPI.changeTimeline(value);
+}
+
 function updateMusicRange() {
     const value = document.querySelector("#music-range").value / document.querySelector("#music-range").max * 100;
     document.querySelector("#music-range").style.background = `linear-gradient(to right, rgba(255, 255, 255, 30%) 0%, white ${value}%, rgba(255, 255, 255, 30%) ${value}%, rgba(255, 255, 255, 30%) 100%)`;
 }
 
 function updateLyrics(videoProg) {
-    if (lyrics_list == null) return;
+    if (lyrics_list == null || lyrics_type != "syn") return;
     const pElements = document.querySelectorAll(".lyrics-wrapper p");
     let lastTemp = 0;
     for (let i = 0; i < lyrics_list.length; i++) {
@@ -157,13 +162,17 @@ window.electronAPI.onWSDisconnected(() => {
 })
 
 window.electronAPI.onLyrics(lyr => {
-    if (lyrics_list == lyr) return;
-    lyrics_list = lyr;
+    console.log(lyr);
+    if (lyrics_list == lyr.lyr) return;
+    lyrics_list = lyr.lyr;
+    lyrics_type = lyr.type;
     document.querySelectorAll(".lyrics-wrapper p").forEach(element => element.remove());
     const lyricsWrapper = document.querySelector(".lyrics-wrapper");
-    lyr.forEach(element => {
+    lyr.lyr.forEach(element => {
         const newElement = document.createElement('p');
         newElement.textContent = element[1];
+        if (lyrics_type == "syn") newElement.onclick = () => moveTo(element[0]);
+        else newElement.className = "active";
         lyricsWrapper.insertBefore(newElement, lyricsWrapper.lastElementChild);
     })
 })

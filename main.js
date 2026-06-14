@@ -314,14 +314,26 @@ ipcMain.on("require-lyrics", async (event, data) => {
             const errText = await response.text();
             throw new Error(`Status: ${response.status} - ${errText}`);
         }
-        const res = (await response.json()).syncedLyrics.split('\n').map(element => {
-            const posOpen = element.indexOf("[") + 1;
-            const posClose = element.indexOf("]");
-            const time = strToNumLyr(element.slice(posOpen, posClose));
-            const lyr = element.slice(posClose + 2);
-            return [time, lyr];
+        const responseJson = await response.json();
+        let res;
+        let type;
+        if (responseJson.syncedLyrics == null) {
+            res = responseJson.plainLyrics.split('\n').map(element => ["plain", element]);
+            type = "plain";
+        } else {
+            res = responseJson.syncedLyrics.split('\n').map(element => {
+                const posOpen = element.indexOf("[") + 1;
+                const posClose = element.indexOf("]");
+                const time = strToNumLyr(element.slice(posOpen, posClose));
+                const lyr = element.slice(posClose + 2);
+                return [time, lyr];
+            });
+            type = "syn";
+        }
+        win.webContents.send("lyrics-update", {
+            lyr: res,
+            type: type
         });
-        win.webContents.send("lyrics-update", res);
         print("Lyrics were send to renderer");
     } catch (err) {
         print(`Error in fetch: ${err}`);
