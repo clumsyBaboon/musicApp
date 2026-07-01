@@ -122,8 +122,8 @@ function moveTo(value) {
 }
 
 function updateMusicRange() {
-    const value = document.querySelector("#music-range").value / document.querySelector("#music-range").max * 100;
-    document.querySelector("#music-range").style.background = `linear-gradient(to right, rgba(255, 255, 255, 30%) 0%, white ${value}%, rgba(255, 255, 255, 30%) ${value}%, rgba(255, 255, 255, 30%) 100%)`;
+    const value = document.querySelector("#music-range").value / document.querySelector("#music-range").max;
+    document.documentElement.style.setProperty("--percen-filled", value);
 }
 
 function updateLyrics(videoProg) {
@@ -192,7 +192,7 @@ const ui = {
     set durationNow(value) { document.querySelector("#duration-now").textContent = value },
     set durationLeft(value) { document.querySelector("#duration-left").textContent = value },
     set timeline(value) { document.querySelector("#music-range").value = value },
-    set playPause(value) { document.querySelector("#play-pause-svg").setAttribute("d", value ? "M6 19h4V5H6v14zm8-14v14h4V5h-4z" : "M8 5v14l11-7z") },
+    set playPause(value) { document.querySelector("#play-pause-img").src = value ? "./img/stop.svg" : "./img/play.svg" },
     duration: 0
 }
 

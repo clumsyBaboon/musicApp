@@ -46,7 +46,7 @@ const createWindow = () => {
 
   win.setMenuBarVisibility(false);
   win.loadFile('./landing/index.html')
-//   win.webContents.openDevTools();
+  win.webContents.openDevTools();
 }
 
 async function sendPOST(url, data) {
@@ -106,7 +106,7 @@ app.whenReady().then(() => {
 })
 
 app.on('window-all-closed', () => {
-    socket.disconnect();
+    if (socket != null) socket.disconnect();
     app.quit()
 })
 

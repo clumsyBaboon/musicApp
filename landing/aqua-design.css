@@ -92,3 +92,22 @@
 #settings button.secondary span {
     text-shadow: 0 0.25em 0.2em rgba(0, 0, 0, 0.25);
 }
+
+#settings input[type="checkbox"]{
+    appearance: none;
+    width: 18.2px;
+    height: 18.8px;
+    background-image: url(img/checkbox_unchecked.svg);
+    background-size: cover;
+    cursor: pointer;
+    transition: filter 200ms;
+}
+#settings input[type="checkbox"]:hover{
+    filter: brightness(1.2);
+}
+#settings input[type="checkbox"]:checked{
+    background-image: url(img/checkbox_checked.svg);
+}
+#settings input[type="checkbox"]:focus{
+    outline: none;
+}
