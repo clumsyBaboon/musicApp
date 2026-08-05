@@ -9,7 +9,8 @@ const VERSION = pkg.version;
 const appId = "clumsybaboon-musicapp";
 
 let config = {
-    "autoConnect": false
+    "autoConnect": false,
+    "autoScroll": true
 }
 let TOKEN = "";
 
@@ -303,6 +304,10 @@ function strToNumLyr(str) {
 ipcMain.on("require-lyrics", async (event, data) => {
     print("Require lyrics");
     const url = "https://lrclib.net/api/get";
+    if (data[0].length == 0 || data[1].length == 0 || data[2] == 0) {
+        print("Require lyrics err. Nothing is playing");
+        return;
+    }
     const data_send = new URLSearchParams({
         track_name: data[0],
         artist_name: data[1],

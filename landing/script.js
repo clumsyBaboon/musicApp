@@ -136,7 +136,7 @@ function updateLyrics(videoProg) {
             lastTemp = i;
         } else pElements[i].className = "";
     }
-    if (lastTemp != last) pElements[lastTemp].scrollIntoView({ block: "center", behavior: "smooth" });
+    if (lastTemp != last && config.autoScroll) pElements[lastTemp].scrollIntoView({ block: "center", behavior: "smooth" });
     last = lastTemp;
 }
 
@@ -284,7 +284,9 @@ function openSettings() {
     isSettingsOpen = true;
     settingsMenu.style.animation = "openSettings 300ms ease-in-out forwards";
     console.log(config.autoConnect);
+    console.log(config.autoScroll);
     document.querySelector("#autoConnectAtStart").checked = config.autoConnect;
+    document.querySelector("#autoScrollLyrics").checked = config.autoScroll;
     document.querySelector("#settings-wrapper").style.backgroundColor = "rgba(0, 0, 0, 50%)";
     document.querySelector("#settings-wrapper").style.pointerEvents = "auto";
 }
@@ -298,7 +300,8 @@ function settings_close() {
 
 function settings_save() {
     const data = {
-        autoConnect: document.querySelector("#autoConnectAtStart").checked
+        autoConnect: document.querySelector("#autoConnectAtStart").checked,
+        autoScroll: document.querySelector("#autoScrollLyrics").checked
     }
     config = data;
     window.electronAPI.updateSettings(data);
