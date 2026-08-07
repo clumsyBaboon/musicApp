@@ -1,3 +1,4 @@
+// Библиотеки
 const { ipcMain, dialog } = require('electron');
 const { app, BrowserWindow } = require('electron/main');
 const fs = require("fs");
@@ -8,30 +9,33 @@ const { send } = require('process');
 const VERSION = pkg.version;
 const appId = "clumsybaboon-musicapp";
 
+// Настройки по умолчанию
 let config = {
     "autoConnect": false,
     "autoScroll": true
 }
 let TOKEN = "";
 
-const SERVER_URL_WS = "http://127.0.0.1:9863/api/v1/realtime";
+const SERVER_URL_WS = "http://127.0.0.1:9863/api/v1/realtime"; // Адрес сокета для постоянного мониторинга
 let socket;
 
+// Функция вывода отладки в консоль
 function print(data, state) {
-    switch (state) {
-        case "log":
+    switch (state) { // Выбор режима
+        case "log": // Обычный лог
         case undefined:
             console.log(`[${__filename}] [${VERSION}]`, data);
             break;
-        case "err":
+        case "err": // Ошибка
             console.error(`[${__filename}] [${VERSION}]`, data);
-            dialog.showErrorBox("Error", data);
+            dialog.showErrorBox("Error", data); // Вывод диалог окна с ошибкой
             break;
     }
 }
 
-let win;
+let win; // Основное окно
 
+// Создание окна
 const createWindow = () => {
   win = new BrowserWindow({
     width: 1400,
@@ -50,6 +54,7 @@ const createWindow = () => {
 //   win.webContents.openDevTools();
 }
 
+// Ф-ция отправки POST запросов
 async function sendPOST(url, data) {
     try {
         const response = await fetch(url, {
@@ -62,16 +67,18 @@ async function sendPOST(url, data) {
         })
         if (!response.ok) {
             const errText = await response.text();
-            throw new Error(`Status: ${response.status} - ${errText}`);
+            throw new Error(`Status: ${response.status} - ${errText}`); // Подъем ошибки при неудачном запросе 
         }
     } catch (err) {
-        print(`Error in fetch: ${err}`, "err");
+        print(`Error in fetch: ${err}`, "err"); // Вывод ошибки в консоль
     }
 }
 
+// При старте программы
 app.whenReady().then(() => {
-  createWindow();
+  createWindow(); // Создание окна
 
+  // Если окно не создалось, попытка создать еще раз
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow()
@@ -79,14 +86,14 @@ app.whenReady().then(() => {
   })
 
   try {
-    const filePath = path.join(app.getPath("userData"), "token.txt");
-    if (fs.existsSync(filePath)) {
-        const data = fs.readFileSync(filePath, "utf-8");
-        TOKEN = data;
-        print("Token file was successfully read");
+    const filePath = path.join(app.getPath("userData"), "token.txt"); // Путь к токен файлу
+    if (fs.existsSync(filePath)) { // Проверка ли существует файл
+        const data = fs.readFileSync(filePath, "utf-8"); // Чтение файла
+        TOKEN = data; // Сохранение в переменную токена
+        print("Token file was successfully read"); // Вывод результат чтения
     } else print("Token file doesn't exist");
-  } catch (err) {
-    print(`Error in reading token file: ${err}`, "err");
+  } catch (err) { // Ошибка при чтении файла
+    print(`Error in reading token file: ${err}`, "err"); // Вывод ошибки в консоль
   }
 
   try {
@@ -106,9 +113,10 @@ app.whenReady().then(() => {
   })
 })
 
+// Если все окна закрыты - закрыть сокет !Добавить мак ос
 app.on('window-all-closed', () => {
     if (socket != null) socket.disconnect();
-    app.quit()
+    app.quit() // Закрыть программу
 })
 
 ipcMain.on("connect-api", async event => {
