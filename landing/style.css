@@ -331,7 +331,7 @@ body>.btn:active{
 }
 #settings{
     position: absolute;
-    width: 300px;
+    width: 320px;
     height: auto;
     background: repeating-linear-gradient(#F0F0F0, #F0F0F0 4px, #FFFFFF 4px, #FFFFFF 8px);
     z-index: 39;
@@ -341,13 +341,14 @@ body>.btn:active{
     box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 50%), 0px 0px 15px 15px rgba(0, 0, 0, 80%);
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
-    grid-template-rows: repeat(7, 50px);
+    grid-template-rows: repeat(8, 50px);
     place-items: center;
 }
 #settings h2{
     font-size: 15px;
     font-weight: 600;
     text-align: center;
+    padding: 7px;
 }
 
 @keyframes openSettings {

@@ -131,7 +131,7 @@ function updateLyrics(videoProg) {
     const pElements = document.querySelectorAll(".lyrics-wrapper p");
     let lastTemp = 0;
     for (let i = 0; i < lyrics_list.length; i++) {
-        if (lyrics_list[i][0] <= videoProg) {
+        if (lyrics_list[i][0] <= Math.floor(videoProg.toFixed(2) * 1000)) {
             pElements[i].className = "active";
             lastTemp = i;
         } else pElements[i].className = "";
@@ -171,7 +171,7 @@ window.electronAPI.onLyrics(lyr => {
     lyr.lyr.forEach(element => {
         const newElement = document.createElement('p');
         newElement.textContent = element[1];
-        if (lyrics_type == "syn") newElement.onclick = () => moveTo(element[0]);
+        if (lyrics_type == "syn") newElement.onclick = () => moveTo(Math.floor(element[0] / 1000));
         else newElement.className = "active";
         lyricsWrapper.insertBefore(newElement, lyricsWrapper.lastElementChild);
     })

@@ -11,10 +11,10 @@ const appId = "clumsybaboon-musicapp";
 
 // Настройки по умолчанию
 let config = {
-    "autoConnect": false,
-    "autoScroll": true
+    "autoConnect": false, // Автоподключение при старте программы
+    "autoScroll": true // Автоскролл слов в треке
 }
-let TOKEN = "";
+let TOKEN = ""; // Переменная для хранения токена
 
 const SERVER_URL_WS = "http://127.0.0.1:9863/api/v1/realtime"; // Адрес сокета для постоянного мониторинга
 let socket;
@@ -51,7 +51,7 @@ const createWindow = () => {
 
   win.setMenuBarVisibility(false);
   win.loadFile('./landing/index.html')
-//   win.webContents.openDevTools();
+  win.webContents.openDevTools();
 }
 
 // Ф-ция отправки POST запросов
@@ -333,10 +333,11 @@ ipcMain.on("update-settings", (event, data) => {
 // Ф-ция перевода MM:SS.MS в секунды
 function strToNumLyr(str) {
     const posDots = str.indexOf(':'); // Нахождения позиции [:]
-    const min = Number(str.slice(0, posDots)); // Число до :
-    const sec = Math.round(Number(str.slice(posDots + 1))); // Число после :
-                                                            // Миллисекунды окгрушляю (0-4 в меньшую, 5-9 в большую) для более точной синхронизации
-    return min * 60 + sec; // Возвращаю результат
+    const posDot = str.indexOf('.'); // Нахождение позиции [.]
+    const min = Number(str.slice(0, posDots));
+    const sec = Number(str.slice(posDots + 1, posDot));
+    const ms = Number(str.slice(posDot + 1));
+    return min * 60000 + sec * 1000 + ms; // Возвращаю результат
 }
 
 // Запрос на текст песни
@@ -374,7 +375,7 @@ ipcMain.on("require-lyrics", async (event, data) => {
                 const posOpen = element.indexOf("[") + 1; // Первая цифра находится по этому индексу (позиция скобки + 1)
                 const posClose = element.indexOf("]"); // Правая скобка находится по этому индексу
                 // Метод slice вырезает включительно с первым аргументом, но не включительно со вторым
-                const time = strToNumLyr(element.slice(posOpen, posClose)); // Передаю ф-ции которая вернет результат в секундах
+                const time = strToNumLyr(element.slice(posOpen, posClose)); // Передаю ф-ции которая вернет результат в миллисекундах
                 const lyr = element.slice(posClose + 2); // Первая буква слов начинается Позиция ] + 2
                                                          // Между словами и правой скобкой всегда стоит пробел
                 return [time, lyr]; // Результат записываеся таким образом
