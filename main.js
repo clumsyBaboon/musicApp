@@ -38,10 +38,10 @@ let win; // Основное окно
 // Создание окна
 const createWindow = () => {
   win = new BrowserWindow({
-    width: 1400,
-    height: 900,
-    minWidth: 1400,
-    minHeight: 900,
+    width: 1000,
+    height: 650,
+    minWidth: 1000,
+    minHeight: 650,
     // icon: path.join(__dirname, "icon.ico"),
     useContentSize: true,
     webPreferences: {

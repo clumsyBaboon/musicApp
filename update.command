@@ -1,4 +1,5 @@
-#!/bin/zsh
+!/bin/zsh
+cd "$(dirname "$0")"
 
 git add .
 
@@ -17,5 +18,3 @@ git push
 
 echo ""
 echo "---done---"
-
-read -p "Press [Enter] to continue..."
